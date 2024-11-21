@@ -5,7 +5,7 @@ function addRecipe() {
     newRecipe.className = "recipe";
 
     const remove = document.createElement("button");
-    remove.id = "remove";
+    remove.className= "remove";
     remove.textContent = "-";
     remove.addEventListener('click', function () {
         newRecipe.remove();
@@ -15,7 +15,25 @@ function addRecipe() {
     const imgInput = document.createElement("input");
     imgInput.type = "file"
     imgInput.className = "recipe-img";
+    imgInput.accept = "image/*";
     newRecipe.appendChild(imgInput);
+
+    const imgPreview = document.createElement("img");
+    imgPreview.className = "image-preview";
+    imgPreview.style.display = "none";
+    newRecipe.appendChild(imgPreview);
+
+    imgInput.addEventListener('change', function(event){
+        const file = event.target.file[0];
+        if(file){
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imgPreview.src = e.target.result;
+                imgPreview.style.display = "block";
+            }
+            reader.readAsDataURL(file);
+        }
+    })
 
     const description = document.createElement("textarea");
     description.placeholder = "Write Recipe...";
