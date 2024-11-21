@@ -1,7 +1,6 @@
 body {
     background-color: white;
     margin: auto;
-    height: 100vh;
     display: grid;
     grid-template-columns: repeat();
 }
@@ -36,14 +35,10 @@ h1 {
     padding: 0 10px;
 }
 
-.recipe, .recipe-img, .description{
-    max-width: 100vh;
-    max-height: 100vh;
-}
 .recipe {
+    position: relative;
     border: 1px solid black;
     border-radius: 10px;
-    display: inline-block;
     margin: 15px;
     padding: 10px;
 }
@@ -54,10 +49,12 @@ h1 {
 }
 
 .recipe-img{
+    position: relative;
     padding-bottom: 10px;
 }
 
 .description{
+    position: relative;
     width: fit-content;
     height: fit-content;
     resize: both;
@@ -67,3 +64,16 @@ h1 {
     font-size: 16px;
 }
 
+.remove{
+    position:absolute;
+    top: 10px;
+    right: 10px;
+    background-color: black;
+    color: white;
+    font-size: 20px;
+    border-radius: 20px;
+}
+
+.remove:hover{
+    background-color: red;
+}
