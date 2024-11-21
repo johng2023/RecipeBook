@@ -79,5 +79,5 @@ function createRecipe(savedData = null) {
         description.value = savedData.description || '';
     }
 
-    document.body.appendChild(newRecipe);
+    document.getElementById('recipes-container').appendChild(newRecipe);
 }
