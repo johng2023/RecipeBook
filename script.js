@@ -1,12 +1,7 @@
-// Initialize event listeners after DOM is loaded
+
 document.addEventListener('DOMContentLoaded', () => {
     const addButton = document.getElementById('addRecipe');
     const recipesContainer = document.getElementById('recipes-container');
-    
-    if (!recipesContainer) {
-        console.error('Recipes container not found!');
-        return;
-    }
     
     if (addButton) {
         addButton.addEventListener('click', addRecipe);
@@ -57,7 +52,7 @@ function createRecipe(savedData = null) {
     remove.addEventListener('click', function () {
         console.log('Remove button clicked');
         newRecipe.remove();
-        saveRecipes(); // Save after removing
+        saveRecipes();
     });
     newRecipe.appendChild(remove);
     imgPreview.className = "image-preview";
@@ -71,7 +66,7 @@ function createRecipe(savedData = null) {
             reader.onload = function(e) {
                 imgPreview.src = e.target.result;
                 imgPreview.style.display = "block";
-                saveRecipes(); // Save after image change
+                saveRecipes(); 
             }
             reader.readAsDataURL(file);
         }
@@ -80,10 +75,8 @@ function createRecipe(savedData = null) {
     const description = document.createElement("textarea");
     description.placeholder = "Write Recipe...";
     description.className = "description";
-    description.addEventListener('input', saveRecipes); // Save on text change
-    newRecipe.appendChild(description);
+    description.addEventListener('input', saveRecipes);
 
-    // If we have saved data, restore it
     if (savedData) {
         if (savedData.imageData) {
             imgPreview.src = savedData.imageData;
