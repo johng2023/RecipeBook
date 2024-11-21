@@ -47,7 +47,13 @@ function createRecipe(savedData = null) {
     remove.className= "remove";
     remove.textContent = "-";
     remove.addEventListener('click', function () {
+        console.log('Remove button clicked');
+        // Clear the image preview
+        imgPreview.src = '';
+        imgPreview.style.display = 'none';
+        // Remove the entire recipe container
         newRecipe.remove();
+        // Update localStorage
         saveRecipes(); // Save after removing
     });
     newRecipe.appendChild(remove);
