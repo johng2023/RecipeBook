@@ -1,7 +1,9 @@
 body {
     background-color: white;
     margin: auto;
-    height: 1000px;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: repeat();
 }
 
 header {
@@ -14,12 +16,18 @@ h1 {
 }
 
 .title button{
-    font-size: 18px;
+    font-size: 25px;
     color: white;
-    background-color: black;  
+    background-color: black; 
+    border: none; 
     border-radius: 20px;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-family:'Times New Roman', Times, serif;
 }
+
+.title button:hover{
+    background-color: green;
+}
+
 .title {
     background-color: lightblue;
     display: flex;
@@ -28,4 +36,34 @@ h1 {
     padding: 0 10px;
 }
 
+.recipe, .recipe-img, .description{
+    max-width: 100vh;
+    max-height: 100vh;
+}
+.recipe {
+    border: 1px solid black;
+    border-radius: 10px;
+    display: inline-block;
+    margin: 15px;
+    padding: 10px;
+}
+
+.recipe-img, .description{
+    display: block;
+    margin: auto;
+}
+
+.recipe-img{
+    padding-bottom: 10px;
+}
+
+.description{
+    width: fit-content;
+    height: fit-content;
+    resize: both;
+    padding: 7px;
+    border: 3px solid black;
+    border-radius: 10px;
+    font-size: 16px;
+}
 
