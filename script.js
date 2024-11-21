@@ -24,7 +24,7 @@ function addRecipe() {
     newRecipe.appendChild(imgPreview);
 
     imgInput.addEventListener('change', function(event){
-        const file = event.target.file[0];
+        const file = event.target.files[0];
         if(file){
             const reader = new FileReader();
             reader.onload = function(e) {
