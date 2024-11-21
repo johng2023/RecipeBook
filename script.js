@@ -43,21 +43,6 @@ function createRecipe(savedData = null) {
     const newRecipe = document.createElement("div");
     newRecipe.className = "recipe";
 
-    const remove = document.createElement("button");
-    remove.className= "remove";
-    remove.textContent = "-";
-    remove.addEventListener('click', function () {
-        console.log('Remove button clicked');
-        // Clear the image preview
-        imgPreview.src = '';
-        imgPreview.style.display = 'none';
-        // Remove the entire recipe container
-        newRecipe.remove();
-        // Update localStorage
-        saveRecipes(); // Save after removing
-    });
-    newRecipe.appendChild(remove);
-
     const imgInput = document.createElement("input");
     imgInput.type = "file"
     imgInput.className = "recipe-img";
@@ -65,6 +50,16 @@ function createRecipe(savedData = null) {
     newRecipe.appendChild(imgInput);
 
     const imgPreview = document.createElement("img");
+    
+    const remove = document.createElement("button");
+    remove.className= "remove";
+    remove.textContent = "-";
+    remove.addEventListener('click', function () {
+        console.log('Remove button clicked');
+        newRecipe.remove();
+        saveRecipes(); // Save after removing
+    });
+    newRecipe.appendChild(remove);
     imgPreview.className = "image-preview";
     imgPreview.style.display = "none";
     newRecipe.appendChild(imgPreview);
