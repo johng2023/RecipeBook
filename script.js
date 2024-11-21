@@ -85,6 +85,8 @@ function createRecipe(savedData = null) {
         description.value = savedData.description || '';
     }
 
+    newRecipe.appendChild(description);
+
     const container = document.getElementById('recipes-container');
     if (container) {
         container.appendChild(newRecipe);
