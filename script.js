@@ -1,7 +1,19 @@
-document.getElementById('addRecipe').addEventListener('click', addRecipe);
-
-// Load saved recipes when the page loads
-document.addEventListener('DOMContentLoaded', loadSavedRecipes);
+// Initialize event listeners after DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    const addButton = document.getElementById('addRecipe');
+    const recipesContainer = document.getElementById('recipes-container');
+    
+    if (!recipesContainer) {
+        console.error('Recipes container not found!');
+        return;
+    }
+    
+    if (addButton) {
+        addButton.addEventListener('click', addRecipe);
+    }
+    
+    loadSavedRecipes();
+});
 
 function loadSavedRecipes() {
     const savedRecipes = JSON.parse(localStorage.getItem('recipes') || '[]');
@@ -79,5 +91,10 @@ function createRecipe(savedData = null) {
         description.value = savedData.description || '';
     }
 
-    document.getElementById('recipes-container').appendChild(newRecipe);
+    const container = document.getElementById('recipes-container');
+    if (container) {
+        container.appendChild(newRecipe);
+    } else {
+        console.error('Recipes container not found!');
+    }
 }
