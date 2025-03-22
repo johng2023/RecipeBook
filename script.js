@@ -1,96 +1,115 @@
+const createBtn = document.querySelector(".createBtn");
+const addIng = document.querySelector(".addBtn");
+const remIng = document.querySelector(".remBtn");
+const recipeForm = document.querySelector(".recipe-form");
+const ingredientList = document.querySelector(".ingredient-list");
+const cardContainer = document.querySelector(".row");
 
-document.addEventListener('DOMContentLoaded', () => {
-    const addButton = document.getElementById('addRecipe');
-    const recipesContainer = document.getElementById('recipes-container');
-    
-    if (addButton) {
-        addButton.addEventListener('click', addRecipe);
-    }
-    
-    loadSavedRecipes();
+function clearData() {
+  // Clear the title and instructions fields
+  document.querySelector("#title").value = "";
+  document.querySelector("#instructions").value = "";
+
+  // Clear all ingredient inputs
+  const ingredients = document.querySelectorAll(".ingredient");
+  ingredients.forEach((input) => {
+    input.value = "";
+  });
+}
+
+function addIngredient() {
+  // Create a new ingredient input field
+  const ingredient = document.createElement("input");
+  ingredient.type = "text";
+  ingredient.className = "form-control m-2 w-75 ingredient";
+  ingredient.placeholder = "Enter Ingredient";
+
+  // Append the new ingredient input to the ingredient list
+  ingredientList.appendChild(ingredient);
+}
+
+function removeIngredient() {
+  // Remove the last ingredient input field
+  const lastIngredient = ingredientList.lastElementChild;
+  if (lastIngredient) {
+    lastIngredient.remove();
+  }
+}
+
+function createRecipe(e) {
+  e.preventDefault(); // Prevent form submission
+  const recipeTitle = document.querySelector("#title").value;
+  const instructions = document.querySelector("#instructions").value;
+
+  // Collect all ingredients into an array
+  const ingredients = Array.from(document.querySelectorAll(".ingredient"))
+    .map((input) => input.value.trim())
+    .filter((value) => value !== ""); // Filter out empty values
+
+  // Create a recipe object
+  const recipe = {
+    title: recipeTitle,
+    instructions: instructions,
+    ingredients: ingredients,
+  };
+
+  // Save the recipe and clear the form
+  saveRecipe(recipe);
+  clearData();
+}
+
+function saveRecipe(recipe) {
+  // Create a card for the recipe and append it to the card container
+  const card = document.createElement("div");
+  card.className = "col";
+  card.innerHTML = `
+    <div class="card" style="width: 18rem">
+      <div class="card-body">
+        <h5 class="card-title">${recipe.title}</h5>
+        <p class="card-text">${recipe.instructions}</p>
+      </div>
+      <ul class="list-group list-group-flush">
+        ${recipe.ingredients
+          .map((ingredient) => `<li class='list-group-item'>${ingredient}</li>`)
+          .join("")}
+      </ul>
+      <div class="card-body">
+        <button type="button" class="btn btn-danger delete">Delete</button>
+      </div>
+    </div>`;
+
+  document.querySelector(".row").appendChild(card);
+  saveData(); // Save the current state to local storage
+}
+
+function saveData() {
+  // Save the current card container's HTML to local storage
+  localStorage.setItem("data", cardContainer.innerHTML);
+}
+
+function showData() {
+  // Load the saved data from local storage
+  cardContainer.innerHTML = localStorage.getItem("data") || "";
+}
+
+function resetAll() {
+  // Clear all recipes from local storage and the display
+  localStorage.clear();
+  cardContainer.innerHTML = "";
+}
+
+// Event Listeners
+addIng.addEventListener("click", addIngredient);
+remIng.addEventListener("click", removeIngredient);
+recipeForm.addEventListener("submit", createRecipe);
+cardContainer.addEventListener("click", function (e) {
+  if (e.target.classList.contains("delete")) {
+    e.target.closest(".col").remove();
+    saveData(); // Update local storage after deletion
+  }
 });
 
-function loadSavedRecipes() {
-    const savedRecipes = JSON.parse(localStorage.getItem('recipes') || '[]');
-    savedRecipes.forEach(recipeData => {
-        createRecipe(recipeData);
-    });
-}
+// Clear all recipes when the clear-all button is clicked
+document.getElementById("clear-all").addEventListener("click", resetAll);
 
-function addRecipe() {
-    createRecipe();
-}
-
-function saveRecipes() {
-    const recipes = [];
-    document.querySelectorAll('.recipe').forEach(recipe => {
-        const imgPreview = recipe.querySelector('.image-preview');
-        const description = recipe.querySelector('.description');
-        recipes.push({
-            imageData: imgPreview.style.display !== 'none' ? imgPreview.src : null,
-            description: description.value
-        });
-    });
-    localStorage.setItem('recipes', JSON.stringify(recipes));
-}
-
-function createRecipe(savedData = null) {
-    const newRecipe = document.createElement("div");
-    newRecipe.className = "recipe";
-
-    const imgInput = document.createElement("input");
-    imgInput.type = "file"
-    imgInput.className = "recipe-img";
-    imgInput.accept = "image/*";
-    newRecipe.appendChild(imgInput);
-
-    const imgPreview = document.createElement("img");
-    
-    const remove = document.createElement("button");
-    remove.className= "remove";
-    remove.textContent = "-";
-    remove.addEventListener('click', function () {
-        console.log('Remove button clicked');
-        newRecipe.remove();
-        saveRecipes();
-    });
-    newRecipe.appendChild(remove);
-    imgPreview.className = "image-preview";
-    imgPreview.style.display = "none";
-    newRecipe.appendChild(imgPreview);
-
-    imgInput.addEventListener('change', function(event){
-        const file = event.target.files[0];
-        if(file){
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                imgPreview.src = e.target.result;
-                imgPreview.style.display = "block";
-                saveRecipes(); 
-            }
-            reader.readAsDataURL(file);
-        }
-    })
-
-    const description = document.createElement("textarea");
-    description.placeholder = "Write Recipe...";
-    description.className = "description";
-    description.addEventListener('input', saveRecipes);
-
-    if (savedData) {
-        if (savedData.imageData) {
-            imgPreview.src = savedData.imageData;
-            imgPreview.style.display = "block";
-        }
-        description.value = savedData.description || '';
-    }
-
-    newRecipe.appendChild(description);
-
-    const container = document.getElementById('recipes-container');
-    if (container) {
-        container.appendChild(newRecipe);
-    } else {
-        console.error('Recipes container not found!');
-    }
-}
+showData(); // Show saved recipes on page load
